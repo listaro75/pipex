@@ -1,6 +1,6 @@
 NAME = pipex
 FLAGS = -Wall -Wextra -Werror
-SRCS = main.c path_ex.c
+SRCS = main.c path_ex.c tools.c children.c
 LIBFT = ./libft/libft.a 
 
 all: $(NAME)
