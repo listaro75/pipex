@@ -6,12 +6,12 @@
 /*   By: luda-cun <luda-cun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 15:22:11 by luda-cun          #+#    #+#             */
-/*   Updated: 2025/03/19 15:42:05 by luda-cun         ###   ########.fr       */
+/*   Updated: 2025/03/24 12:38:52 by luda-cun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-// verif le bon chemin 
+
 int	ft_chrpath(char *str)
 {
 	int	i;
@@ -78,10 +78,10 @@ char	**the_paths(char **envp)
 
 char	*verif_ex(char **paths, char *cmd)
 {
-	char	*slashcmd;
-	char	**splitcmd;
-	char	*path;
-	int		i;
+	char *slashcmd;
+	char **splitcmd;
+	char *path;
+	int i;
 
 	i = 0;
 	splitcmd = ft_split(cmd, ' ');

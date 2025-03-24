@@ -6,14 +6,13 @@
 /*   By: luda-cun <luda-cun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 11:16:04 by luda-cun          #+#    #+#             */
-/*   Updated: 2025/03/20 12:32:26 by luda-cun         ###   ########.fr       */
+/*   Updated: 2025/03/24 12:37:23 by luda-cun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
 
-# include "gnl/get_next_line.h"
 # include "libft/inc/ft_printf.h"
 # include "libft/inc/libft.h"
 # include <fcntl.h>

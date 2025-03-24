@@ -6,12 +6,11 @@
 /*   By: luda-cun <luda-cun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 12:03:11 by luda-cun          #+#    #+#             */
-/*   Updated: 2025/03/20 12:12:41 by luda-cun         ###   ########.fr       */
+/*   Updated: 2025/03/24 12:37:02 by luda-cun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
 
 void	free_tab(char **tab)
 {
@@ -43,4 +42,3 @@ char	**change_tab(char **tab, char *cmd)
 	tab[0] = ft_strdup(cmd);
 	return (tab);
 }
-
