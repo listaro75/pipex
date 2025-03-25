@@ -6,11 +6,23 @@
 /*   By: luda-cun <luda-cun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 12:08:26 by luda-cun          #+#    #+#             */
-/*   Updated: 2025/03/25 14:38:10 by luda-cun         ###   ########.fr       */
+/*   Updated: 2025/03/25 15:51:14 by luda-cun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	close_fd(int pipe1[2], int fd[2])
+{
+	if (fd[0] >= 0)
+		close(fd[0]);
+	if (fd[1] >= 0)
+		close(fd[1]);
+	if (pipe1[0] >= 0)
+		close(pipe1[0]);
+	if (pipe1[1] >= 0)
+		close(pipe1[1]);
+}
 
 void	children_processe2(int pipe1[2], int fd[2], char **cmd2, char **envp)
 {
@@ -24,25 +36,12 @@ void	children_processe2(int pipe1[2], int fd[2], char **cmd2, char **envp)
 		perror("dup2 output");
 		exit(EXIT_FAILURE);
 	}
-	close(fd[0]);
-	close(fd[1]);
-	close(pipe1[0]);
-	close(pipe1[1]);
-	if (execve(cmd2[0], cmd2, envp) == -1)
+	close_fd(fd, pipe1);
+	if (cmd2 && execve(cmd2[0], cmd2, envp) == -1)
 	{
 		perror(cmd2[0]);
 		exit(EXIT_FAILURE);
 	}
-}
-
-void	close_fd(int pipe1[2], int fd[2])
-{
-	if (fd[0] >= 0)  // On vérifie que fd[0] est bien valide avant de le fermer
-		close(fd[0]);
-	if (fd[1] >= 0)  // Même chose pour fd[1]
-		close(fd[1]);
-	close(pipe1[0]);
-	close(pipe1[1]);
 }
 
 void	children_processe1(int pipe1[2], int fd[2], char **cmd1, char **envp)
@@ -68,10 +67,7 @@ void	init_fd_pipe(int fd[2], int pipe1[2], char **av)
 		perror(av[1]);
 	fd[1] = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd[1] == -1)
-	{
 		perror(av[4]);
-		exit(EXIT_FAILURE);
-	}
 	if (pipe(pipe1) == -1)
 	{
 		perror("pipe");
@@ -87,26 +83,16 @@ void	create_children(char **cmd1, char **cmd2, char **envp, char **av)
 	int	pid2;
 
 	init_fd_pipe(fd, pipe1, av);
-	if (fd[0] > 0)
+	if (fd[0] > 0 && cmd1)
 	{
 		pid1 = fork();
-		if (pid1 < 0)
-		{
-			perror("fork");
-			exit(EXIT_FAILURE);
-		}
+		error_pid(pid1);
 		if (pid1 == 0)
 			children_processe1(pipe1, fd, cmd1, envp);
 	}
 	pid2 = fork();
-	if (pid2 < 0)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-	if (pid2 == 0)
+	error_pid(pid2);
+	if (pid2 == 0 && fd[1] >= 0)
 		children_processe2(pipe1, fd, cmd2, envp);
 	close_fd(pipe1, fd);
-	// waitpid(pid1, NULL, 0);
-	// waitpid(pid2, NULL, 0);
 }

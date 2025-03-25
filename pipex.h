@@ -6,7 +6,7 @@
 /*   By: luda-cun <luda-cun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 11:16:04 by luda-cun          #+#    #+#             */
-/*   Updated: 2025/03/24 12:37:23 by luda-cun         ###   ########.fr       */
+/*   Updated: 2025/03/25 15:56:51 by luda-cun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,7 @@ void	print_tab(char **tab);
 void	free_tab(char **tab);
 char	**change_tab(char **tab, char *cmd);
 void	create_children(char **cmd1, char **cmd2, char **envp, char **av);
+void	error_pid(int pid);
+void	close_fd2(int fd[2]);
 
 #endif

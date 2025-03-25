@@ -6,7 +6,7 @@
 /*   By: luda-cun <luda-cun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 11:15:37 by luda-cun          #+#    #+#             */
-/*   Updated: 2025/03/25 14:37:17 by luda-cun         ###   ########.fr       */
+/*   Updated: 2025/03/25 16:01:06 by luda-cun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ void	create_outfile(char **av, char **envp, char **paths, int fd)
 
 	cmdtouch = verif_ex(paths, "touch");
 	outfile = ft_cmdtouch(cmdtouch, av[4]);
-	close(fd);
+	if (fd >= 0)
+		close(fd);
 	pid1 = fork();
 	if (pid1 < 0)
 	{
@@ -70,6 +71,20 @@ void	create_outfile(char **av, char **envp, char **paths, int fd)
 	return (free(cmdtouch), free_tab(outfile));
 }
 
+void	ft_error(char **envp, int ac)
+{
+	if (envp == NULL)
+	{
+		perror("No environnement\n");
+		exit(EXIT_FAILURE);
+	}
+	if (ac != 5)
+	{
+		ft_printf("no argument");
+		exit(EXIT_FAILURE);
+	}
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char	**paths;
@@ -77,10 +92,7 @@ int	main(int argc, char **argv, char **envp)
 	char	*pathcmd1;
 	char	*pathcmd2;
 
-	if (envp == NULL)
-		return (perror("No environnement\n"), 1);
-	if (argc != 5)
-		perror("error\n");
+	ft_error(envp, argc);
 	fd[0] = open(argv[1], O_RDWR);
 	paths = the_paths(envp);
 	fd[1] = open(argv[4], O_RDWR);
@@ -93,7 +105,6 @@ int	main(int argc, char **argv, char **envp)
 	if (pathcmd2 == NULL)
 		perror(argv[3]);
 	execution(pathcmd1, pathcmd2, argv, envp);
-	close(fd[0]);
-	close(fd[1]);
+	close_fd2(fd);
 	return (free(pathcmd1), free(pathcmd2), free_tab(paths), 0);
 }
