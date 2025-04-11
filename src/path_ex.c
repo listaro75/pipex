@@ -6,11 +6,11 @@
 /*   By: luda-cun <luda-cun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 15:22:11 by luda-cun          #+#    #+#             */
-/*   Updated: 2025/03/25 15:59:34 by luda-cun         ###   ########.fr       */
+/*   Updated: 2025/04/11 15:32:08 by luda-cun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../pipex.h"
 
 int	ft_chrpath(char *str)
 {
@@ -59,18 +59,23 @@ char	*ft_delegal(char *str)
 char	**the_paths(char **envp)
 {
 	int		i;
+	int		verif;
 	char	*path;
 	char	**paths;
 
 	i = 0;
+	verif = 0;
 	while (envp[i])
 	{
 		if (ft_chrpath(envp[i]) == 0)
 		{
+			verif++;
 			path = ft_strdup(envp[i]);
 		}
 		i++;
 	}
+	if (verif == 0)
+		exit(EXIT_FAILURE);
 	path = ft_delegal(path);
 	paths = ft_split(path, ':');
 	return (free(path), paths);

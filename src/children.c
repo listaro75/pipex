@@ -6,11 +6,11 @@
 /*   By: luda-cun <luda-cun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 12:08:26 by luda-cun          #+#    #+#             */
-/*   Updated: 2025/03/25 15:51:14 by luda-cun         ###   ########.fr       */
+/*   Updated: 2025/03/31 14:53:34 by luda-cun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../pipex.h"
 
 void	close_fd(int pipe1[2], int fd[2])
 {
@@ -65,7 +65,7 @@ void	init_fd_pipe(int fd[2], int pipe1[2], char **av)
 	fd[0] = open(av[1], O_RDONLY);
 	if (fd[0] == -1)
 		perror(av[1]);
-	fd[1] = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd[1] = open(av[4], O_WRONLY);
 	if (fd[1] == -1)
 		perror(av[4]);
 	if (pipe(pipe1) == -1)
@@ -75,24 +75,30 @@ void	init_fd_pipe(int fd[2], int pipe1[2], char **av)
 	}
 }
 
-void	create_children(char **cmd1, char **cmd2, char **envp, char **av)
+int	create_children(char **cmd1, char **cmd2, char **envp, char **av)
 {
 	int	fd[2];
 	int	pipe1[2];
 	int	pid1;
 	int	pid2;
+	int	i;
 
+	i = 0;
+	pid1 = -1;
 	init_fd_pipe(fd, pipe1, av);
 	if (fd[0] > 0 && cmd1)
 	{
 		pid1 = fork();
 		error_pid(pid1);
+		i++;
 		if (pid1 == 0)
 			children_processe1(pipe1, fd, cmd1, envp);
 	}
 	pid2 = fork();
 	error_pid(pid2);
+	i++;
 	if (pid2 == 0 && fd[1] >= 0)
 		children_processe2(pipe1, fd, cmd2, envp);
 	close_fd(pipe1, fd);
+	return (i);
 }

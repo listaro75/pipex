@@ -6,11 +6,11 @@
 /*   By: luda-cun <luda-cun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 12:03:11 by luda-cun          #+#    #+#             */
-/*   Updated: 2025/03/25 15:56:40 by luda-cun         ###   ########.fr       */
+/*   Updated: 2025/03/31 14:49:19 by luda-cun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../pipex.h"
 
 void	close_fd2(int fd[2])
 {
