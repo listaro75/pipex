@@ -6,7 +6,7 @@
 /*   By: luda-cun <luda-cun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 15:22:11 by luda-cun          #+#    #+#             */
-/*   Updated: 2025/04/11 15:32:08 by luda-cun         ###   ########.fr       */
+/*   Updated: 2025/04/15 12:14:04 by luda-cun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*ft_delegal(char *str)
 
 	i = 0;
 	j = 0;
-	while (str[i])
+	while (str && str[i])
 	{
 		if (str[i] == '=')
 		{
@@ -71,6 +71,8 @@ char	**the_paths(char **envp)
 		{
 			verif++;
 			path = ft_strdup(envp[i]);
+			if (!path)
+				exit(EXIT_FAILURE);
 		}
 		i++;
 	}
@@ -78,6 +80,8 @@ char	**the_paths(char **envp)
 		exit(EXIT_FAILURE);
 	path = ft_delegal(path);
 	paths = ft_split(path, ':');
+	if (!paths)
+		return (NULL);
 	return (free(path), paths);
 }
 
@@ -89,8 +93,14 @@ char	*verif_ex(char **paths, char *cmd)
 	int		i;
 
 	i = 0;
+	if (access(cmd, X_OK) == 0)
+		return (ft_strdup(cmd));
 	splitcmd = ft_split(cmd, ' ');
+	if (splitcmd == NULL || splitcmd[0] == NULL)
+		return (free(splitcmd), NULL);
 	slashcmd = ft_strjoin("/", splitcmd[0]);
+	if (!slashcmd)
+		return (free(splitcmd), ft_putstr_fd("Error malloc\n", 2), NULL);
 	while (paths[i] != NULL)
 	{
 		path = ft_strjoin(paths[i], slashcmd);

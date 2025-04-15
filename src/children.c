@@ -6,7 +6,7 @@
 /*   By: luda-cun <luda-cun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 12:08:26 by luda-cun          #+#    #+#             */
-/*   Updated: 2025/03/31 14:53:34 by luda-cun         ###   ########.fr       */
+/*   Updated: 2025/04/15 12:37:55 by luda-cun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,13 @@ void	children_processe2(int pipe1[2], int fd[2], char **cmd2, char **envp)
 	if (dup2(pipe1[0], STDIN_FILENO) == -1)
 	{
 		perror("dup2 pipe read");
+		close_fd(fd, pipe1);
 		exit(EXIT_FAILURE);
 	}
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
 	{
 		perror("dup2 output");
+		close_fd(fd, pipe1);
 		exit(EXIT_FAILURE);
 	}
 	close_fd(fd, pipe1);
@@ -50,6 +52,7 @@ void	children_processe1(int pipe1[2], int fd[2], char **cmd1, char **envp)
 	if (dup2(pipe1[1], STDOUT_FILENO) == -1)
 	{
 		perror("dup2 pipe write");
+		close_fd(pipe1, fd);
 		exit(EXIT_FAILURE);
 	}
 	close_fd(pipe1, fd);
@@ -65,7 +68,7 @@ void	init_fd_pipe(int fd[2], int pipe1[2], char **av)
 	fd[0] = open(av[1], O_RDONLY);
 	if (fd[0] == -1)
 		perror(av[1]);
-	fd[1] = open(av[4], O_WRONLY);
+	fd[1] = open(av[4], O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (fd[1] == -1)
 		perror(av[4]);
 	if (pipe(pipe1) == -1)

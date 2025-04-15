@@ -6,7 +6,7 @@
 /*   By: luda-cun <luda-cun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 11:15:37 by luda-cun          #+#    #+#             */
-/*   Updated: 2025/04/11 15:30:30 by luda-cun         ###   ########.fr       */
+/*   Updated: 2025/04/15 12:39:58 by luda-cun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,21 +69,25 @@ void	ft_error(char **envp, int ac)
 int	main(int argc, char **argv, char **envp)
 {
 	char	**paths;
-	int		fd[2];
 	char	*pathcmd1;
 	char	*pathcmd2;
 
 	ft_error(envp, argc);
 	paths = the_paths(envp);
-	fd[0] = open(argv[1], O_RDWR);
-	fd[1] = open(argv[4], O_RDWR | O_TRUNC | O_CREAT, 0644);
 	pathcmd1 = verif_ex(paths, argv[2]);
 	if (pathcmd1 == NULL)
-		perror(argv[2]);
+	{
+		ft_putstr_fd("zsh: command not found: ", 2);
+		ft_putstr_fd(argv[2], 2);
+		ft_putstr_fd("\n", 2);
+	}
 	pathcmd2 = verif_ex(paths, argv[3]);
 	if (pathcmd2 == NULL)
-		perror(argv[3]);
+	{
+		ft_putstr_fd("zsh: command not found: ", 2);
+		ft_putstr_fd(argv[3], 2);
+		ft_putstr_fd("\n", 2);
+	}
 	execution(pathcmd1, pathcmd2, argv, envp);
-	close_fd2(fd);
 	return (free(pathcmd1), free(pathcmd2), free_tab(paths), 0);
 }

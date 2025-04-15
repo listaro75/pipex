@@ -1,5 +1,5 @@
 NAME = pipex
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g3
 SRCS = src/main.c src/path_ex.c src/tools.c src/children.c
 OBJS_DIR = obj
 OBJS = $(addprefix $(OBJS_DIR)/, $(SRCS:src/%.c=%.o))
